@@ -1,0 +1,38 @@
+services:
+  botc-wiki:
+    build: .
+    image: botc-wiki-service:latest
+    container_name: botc-wiki
+    restart: unless-stopped
+    expose:
+      - "8090"
+    ports:
+      - "8090:8090"
+    environment:
+      # on-start scrape: always | never | auto(默认，db 为空则抓)
+      SCRAPE_ON_START: auto
+      LISTEN_ADDR: ":8090"
+      TZ: Asia/Shanghai
+    volumes:
+      # 数据持久化（含 SQLite 文件）
+      - ./data:/app/data
+    networks:
+      - botc-net
+
+  botc-web:
+    build: ./web
+    image: botc-web:latest
+    container_name: botc-web
+    restart: unless-stopped
+    ports:
+      - "18080:80"
+    depends_on:
+      - botc-wiki
+    environment:
+      TZ: Asia/Shanghai
+    networks:
+      - botc-net
+
+networks:
+  botc-net:
+    driver: bridge
