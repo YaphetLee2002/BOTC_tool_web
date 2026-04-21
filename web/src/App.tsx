@@ -34,7 +34,7 @@ import {
 import { cn } from '@/lib/utils'
 
 const ALL = '__all__'
-const PAGE_SIZE = 50
+const PAGE_SIZE = 24
 
 export default function App() {
   const [sets, setSets] = useState<EnumItem[]>([])
